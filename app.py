@@ -1,65 +1,89 @@
-import os, uuid, requests
-from flask import Flask, request, render_template_string, send_from_directory
+from flask import Flask, render_template_string, request
+import requests, uuid, base64
 
 app = Flask(__name__)
-PRIMARY_KEY = os.getenv("PRIMARY_KEY")
-API_USER = os.getenv("API_USER")
-API_KEY = os.getenv("API_KEY")
+
+# YOUR PRODUCTS - Kyambogo Market Price
+PRODUCTS = [
+    {"name": "Matooke", "price": 20000, "unit": "bunch", "emoji": "🍌"},
+    {"name": "Cassava Bunch", "price": 3000, "unit": "bunch", "emoji": "🥔"},
+    {"name": "Beans", "price": 6000, "unit": "kg", "emoji": "🫘"},
+    {"name": "Posho", "price": 2000, "unit": "kg", "emoji": "🌽"},
+    {"name": "Cooking Oil", "price": 3500, "unit": "1 litre", "emoji": "🛢️"},
+    {"name": "Rice", "price": 4500, "unit": "kg", "emoji": "🍚"},
+]
+
+# MTN + AIRTEL KEYS - Put your real keys here
+MTN_SUB_KEY = "YOUR_MTN_SUBSCRIPTION_KEY"
+MTN_API_USER = "YOUR_MTN_API_USER"
+MTN_API_KEY = "YOUR_MTN_API_KEY"
+
+AIRTEL_CLIENT_ID = "YOUR_AIRTEL_CLIENT_ID"
+AIRTEL_CLIENT_SECRET = "YOUR_AIRTEL_SECRET"
 
 HTML = """
-<!DOCTYPE html>
-<html>
-<head><title>FOOD STORE & GROCERY</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html><head><meta name="viewport" content="width=device-width">
 <style>
-body{font-family:sans-serif;background:#e8f5e9;display:flex;justify-content:center;padding:15px}
-.card{background:white;padding:20px;border-radius:18px;box-shadow:0 6px 20px rgba(0,0,0,0.2);width:100%;max-width:430px;text-align:center;border-top:7px solid #ffc107}
-.logo{width:180px;height:180px;border-radius:50%;margin:0 auto 12px;display:block;border:5px solid #ffc107}
-.loc{background:#1b5e20;color:#ffeb3b;padding:5px 12px;border-radius:20px;font-size:11px;display:inline-block;margin-bottom:8px;font-weight:bold}
-input{width:100%;padding:13px;margin:8px 0;border:1px solid #a5d6a7;border-radius:10px;box-sizing:border-box}
-button{background:#ffca28;color:#000;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:17px;cursor:pointer}
-</style>
-</head>
-<body>
+body{font-family:sans-serif;background:#f0fff0;padding:10px}
+.card{background:white;padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 2px 5px #ccc}
+.btn{padding:12px 20px;border:none;border-radius:8px;color:white;font-weight:bold;width:100%;margin:5px 0}
+.mtn{background:#ffcc00;color:black} .airtel{background:#ff0000}
+input{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:1px solid #ccc}
+</style></head><body>
+<h1>🟢 MomoTap - Kyambogo Market</h1>
+<p>Fresh market products - Pay with MTN or Airtel</p>
+{% for p in products %}
 <div class="card">
-<img src="/logo.png" class="logo" onerror="this.style.display='none'">
-<div class="loc">📍 Kyambogo • Kampala • Jinja UG | 256791734789</div>
-<h2>FOOD STORE & GROCERY</h2>
-<h3>KAMPALA UG @ KYAMBOGO 256</h3>
-<form method="post" action="/pay">
-<input name="phone" placeholder="MTN Number 2567..." required value="{{phone}}">
-<input name="amount" placeholder="Amount UGX" type="number" required value="{{amount}}">
-<button>Pay Now - MTN MoMo 🤑</button>
+<h3>{{p.emoji}} {{p.name}} - {{p.unit}}</h3>
+<p><b>Shs. {{p.price}}</b></p>
+<form method="POST" action="/pay">
+<input type="hidden" name="amount" value="{{p.price}}">
+<input type="hidden" name="product" value="{{p.name}}">
+<input name="phone" placeholder="Enter 2567... MTN or 25675... Airtel" required>
+<button class="btn mtn" name="method" value="mtn">Pay with MTN MoMo</button>
+<button class="btn airtel" name="method" value="airtel">Pay with Airtel Money</button>
 </form>
-{% if result %}<div style="margin-top:15px;padding:10px;background:#d4edda;border-radius:8px">{{result}}</div>{% endif %}
-<br><small>✅ Fresh • Affordable • Fast Delivery</small>
 </div>
-</body>
-</html>
+{% endfor %}
+</body></html>
 """
 
 @app.route("/")
 def home():
-    return render_template_string(HTML, result="", phone="", amount="")
-
-@app.route("/logo.png")
-def logo():
-    return send_from_directory(".", "logo.png")
+    return render_template_string(HTML, products=PRODUCTS)
 
 @app.route("/pay", methods=["POST"])
 def pay():
-    phone=request.form.get("phone","").strip()
-    amount=request.form.get("amount","").strip()
-    try:
-        r=requests.post("https://sandbox.momodeveloper.mtn.com/collection/token/", headers={"Ocp-Apim-Subscription-Key": PRIMARY_KEY}, auth=(API_USER, API_KEY), timeout=15)
-        token=r.json().get("access_token")
-        ref=str(uuid.uuid4())
-        data={"amount":amount,"currency":"EUR","externalId":ref,"payer":{"partyIdType":"MSISDN","partyId":phone},"payerMessage":"Food Store","payeeNote":"Food Store"}
-        pr=requests.post("https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay", json=data, headers={"Authorization": f"Bearer {token}","X-Reference-Id":ref,"X-Target-Environment":"sandbox","Ocp-Apim-Subscription-Key":PRIMARY_KEY}, timeout=15)
-        msg=f"✅ SUCCESS! {phone} Paid {amount} UGX" if pr.status_code in [200,202] else f"FAIL {pr.status_code}"
-        return render_template_string(HTML, result=msg, phone="", amount="")
-    except Exception as e:
-        return render_template_string(HTML, result=f"ERROR {e}", phone=phone, amount=amount)
+    phone = request.form["phone"]
+    amount = request.form["amount"]
+    product = request.form["product"]
+    method = request.form["method"]
+    ref = str(uuid.uuid4())
+    
+    if method == "mtn":
+        # MTN REAL PROMPT
+        try:
+            auth = base64.b64encode(f"{MTN_API_USER}:{MTN_API_KEY}".encode()).decode()
+            token = requests.post("https://sandbox.momodeveloper.mtn.com/collection/token/",
+                headers={"Authorization": f"Basic {auth}", "Ocp-Apim-Subscription-Key": MTN_SUB_KEY}).json()["access_token"]
+            r = requests.post("https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay",
+                headers={"Authorization": f"Bearer {token}", "X-Reference-Id": ref, "X-Target-Environment": "sandbox", "Ocp-Apim-Subscription-Key": MTN_SUB_KEY},
+                json={"amount": amount, "currency": "UGX", "externalId": ref, "payer": {"partyIdType": "MSISDN", "partyId": phone}, "payerMessage": product, "payeeNote": "MomoTap"})
+            return f"<h1>MTN Prompt Sent to {phone}!</h1><p>Check phone for PIN. Product: {product} - {amount} UGX<br>Ref: {ref}</p><a href='/'>Back</a>" if r.status_code==202 else f"MTN Error: {r.text}"
+        except Exception as e:
+            return f"MTN Setup Needed: {e}. Add your MTN keys first!"
+    
+    else:
+        # AIRTEL REAL PROMPT
+        try:
+            token = requests.post("https://openapiuat.airtel.africa/auth/oauth2/token",
+                json={"client_id": AIRTEL_CLIENT_ID, "client_secret": AIRTEL_CLIENT_SECRET, "grant_type": "client_credentials"}).json()["access_token"]
+            r = requests.post("https://openapiuat.airtel.africa/merchant/v1/payments/",
+                headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json", "X-Country": "UG", "X-Currency": "UGX"},
+                json={"reference": ref, "subscriber": {"country": "UG", "currency": "UGX", "msisdn": phone}, "transaction": {"amount": int(amount), "country": "UG", "currency": "UGX", "id": ref}})
+            return f"<h1>Airtel Prompt Sent to {phone}!</h1><p>Check phone for PIN. Product: {product} - {amount} UGX<br>Ref: {ref}</p><a href='/'>Back</a>" if r.status_code in [200,202] else f"Airtel Error: {r.text}"
+        except Exception as e:
+            return f"Airtel Setup Needed: {e}. Add your Airtel keys first!"
 
-if __name__=="__main__":
-    app.run(host="0.0.0.0", port=10000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
