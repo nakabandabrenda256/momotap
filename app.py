@@ -1,85 +1,83 @@
-from flask import Flask, render_template_string, send_file, request
+from flask import Flask, send_from_directory, render_template_string
 import os
 
 app = Flask(__name__)
 
-# YOUR PRODUCTS - Kyambogo Market Prices
+WHATSAPP_NUMBER = "256791734789"
+
 PRODUCTS = [
-    {"name": "Matooke", "price": 20000, "unit": "bunch", "emoji": "🍌"},
-    {"name": "Cassava Bunch", "price": 3000, "unit": "bunch", "emoji": "🥔"},
-    {"name": "Beans", "price": 6000, "unit": "kg", "emoji": "🫘"},
-    {"name": "Posho", "price": 2000, "unit": "kg", "emoji": "🌽"},
-    {"name": "Cooking Oil", "price": 3500, "unit": "litre", "emoji": "🛢️"},
-    {"name": "Rice", "price": 4500, "unit": "kg", "emoji": "🍚"},
+    {"id":1, "name":"Matooke - bunch", "price":20000, "emoji":"🍌", "cat":"Staples"},
+    {"id":2, "name":"Matooke - half bunch", "price":12000, "emoji":"🍌", "cat":"Staples"},
+    {"id":3, "name":"Cassava Bunch - bunch", "price":3000, "emoji":"🥔", "cat":"Staples"},
+    {"id":4, "name":"Sweet Potatoes - kg", "price":2500, "emoji":"🍠", "cat":"Staples"},
+    {"id":5, "name":"Yams - kg", "price":4000, "emoji":"🍠", "cat":"Staples"},
+    {"id":6, "name":"Posho - kg", "price":2000, "emoji":"🌽", "cat":"Flour"},
+    {"id":7, "name":"Posho - 5kg bag", "price":9000, "emoji":"🌽", "cat":"Flour"},
+    {"id":8, "name":"Rice - kg (Super)", "price":5000, "emoji":"🍚", "cat":"Flour"},
+    {"id":9, "name":"Rice - 5kg", "price":23000, "emoji":"🍚", "cat":"Flour"},
+    {"id":10, "name":"Beans - kg (Nambale)", "price":6000, "emoji":"🫘", "cat":"Beans"},
+    {"id":11, "name":"Beans - kg (Yellow)", "price":7000, "emoji":"🫘", "cat":"Beans"},
+    {"id":12, "name":"Cow Peas - kg", "price":6500, "emoji":"🫘", "cat":"Beans"},
+    {"id":13, "name":"G-Nuts - kg", "price":8000, "emoji":"🥜", "cat":"Beans"},
+    {"id":14, "name":"Peas - kg", "price":12000, "emoji":"🟢", "cat":"Beans"},
+    {"id":15, "name":"Tomatoes - kg", "price":4000, "emoji":"🍅", "cat":"Vegetables"},
+    {"id":16, "name":"Onions - kg", "price":5000, "emoji":"🧅", "cat":"Vegetables"},
+    {"id":17, "name":"Cabbage - head", "price":3000, "emoji":"🥬", "cat":"Vegetables"},
+    {"id":18, "name":"Carrots - kg", "price":4000, "emoji":"🥕", "cat":"Vegetables"},
+    {"id":19, "name":"Green Pepper - kg", "price":6000, "emoji":"🫑", "cat":"Vegetables"},
+    {"id":20, "name":"Eggplants - kg", "price":3000, "emoji":"🍆", "cat":"Vegetables"},
+    {"id":21, "name":"Dodo - bunch", "price":1000, "emoji":"🥬", "cat":"Vegetables"},
+    {"id":22, "name":"Nakati - bunch", "price":1000, "emoji":"🥬", "cat":"Vegetables"},
+    {"id":23, "name":"Bugga - bunch", "price":1000, "emoji":"🥬", "cat":"Vegetables"},
+    {"id":24, "name":"Avocado - pc", "price":1000, "emoji":"🥑", "cat":"Vegetables"},
+    {"id":25, "name":"Pumpkin - kg", "price":2000, "emoji":"🎃", "cat":"Vegetables"},
+    {"id":26, "name":"Cucumber - kg", "price":3500, "emoji":"🥒", "cat":"Vegetables"},
+    {"id":27, "name":"Watermelon - pc", "price":8000, "emoji":"🍉", "cat":"Fruits"},
+    {"id":28, "name":"Pineapple - pc", "price":5000, "emoji":"🍍", "cat":"Fruits"},
+    {"id":29, "name":"Mangoes - kg", "price":5000, "emoji":"🥭", "cat":"Fruits"},
+    {"id":30, "name":"Bananas - bunch (sweet)", "price":8000, "emoji":"🍌", "cat":"Fruits"},
+    {"id":31, "name":"Passion Fruits - kg", "price":6000, "emoji":"💜", "cat":"Fruits"},
+    {"id":32, "name":"Oranges - kg", "price":4000, "emoji":"🍊", "cat":"Fruits"},
+    {"id":33, "name":"Lemons - kg", "price":5000, "emoji":"🍋", "cat":"Fruits"},
+    {"id":34, "name":"Cooking Oil - 1L", "price":7000, "emoji":"🫙", "cat":"Cooking"},
+    {"id":35, "name":"Cooking Oil - 5L", "price":32000, "emoji":"🫙", "cat":"Cooking"},
+    {"id":36, "name":"Salt - kg", "price":2000, "emoji":"🧂", "cat":"Cooking"},
+    {"id":37, "name":"Sugar - kg", "price":5000, "emoji":"🍚", "cat":"Cooking"},
+    {"id":38, "name":"Royco - 100g", "price":2500, "emoji":"🧂", "cat":"Cooking"},
+    {"id":39, "name":"Curry Powder", "price":2000, "emoji":"🧂", "cat":"Cooking"},
+    {"id":40, "name":"Eggs - tray (30)", "price":15000, "emoji":"🥚", "cat":"Protein"},
+    {"id":41, "name":"Chicken - whole", "price":25000, "emoji":"🍗", "cat":"Protein"},
+    {"id":42, "name":"Beef - kg", "price":18000, "emoji":"🥩", "cat":"Protein"},
+    {"id":43, "name":"Fish - Tilapia kg", "price":20000, "emoji":"🐟", "cat":"Protein"},
+    {"id":44, "name":"Milk - 500ml", "price":2000, "emoji":"🥛", "cat":"Protein"},
 ]
 
-# READ KEYS FROM RENDER SECRET FILES OR ENV - SAFE!
-MTN_SUB_KEY = os.environ.get("MTN_SUB_KEY") or open("/etc/secrets/MTN_SUB_KEY","r").read().strip() if os.path.exists("/etc/secrets/MTN_SUB_KEY") else "YOUR_KEY_HERE"
-MTN_API_USER = os.environ.get("MTN_API_USER") or "43124307-..."
-MTN_API_KEY = os.environ.get("MTN_API_KEY") or "YOUR_LIVE_KEY_FROM_MTN"
-
-# FIX LOGO - Serve it!
-@app.route('/logo.png')
-def logo():
-    if os.path.exists("static/logo.png"):
-        return send_file("static/logo.png", mimetype='image/png')
-    if os.path.exists("logo.png"):
-        return send_file("logo.png", mimetype='image/png')
-    return "Logo not found - upload to static/logo.png", 404
-
-@app.route('/')
-def home():
-    html = """
-    <!DOCTYPE html>
-    <html>
-    <head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Store & Grocery - Kyambogo 256</title>
-    <style>
-    body{margin:0;font-family:system-ui;background:#F6FFF6}
-    header{background:#0A6B2E;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
-    .logo{display:flex;align-items:center;gap:10px;font-weight:900}
-    .logo img{width:50px;height:50px;border-radius:50%;border:3px solid #FFD700;background:white}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
-    .card{background:white;border-radius:16px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    .price{color:#0A6B2E;font-weight:900}
-    button.add{background:#111;color:white;border:none;padding:8px 14px;border-radius:8px;margin-top:6px;width:100%}
-    </style>
-    </head>
-    <body>
-    <header>
-      <div class="logo">
-        <img src="/logo.png" onerror="this.src='/static/logo.png'">
-        <div>FOOD STORE & GROCERY<br><small style="color:#FFD700">KAMPALA UG @ KYAMBOGO 256<br>0791734789</small></div>
-      </div>
-      <div>🛒</div>
-    </header>
-    <div style="text-align:center;padding:14px;background:white">
-      <img src="/logo.png" onerror="this.src='/static/logo.png'" style="width:140px;height:140px;border-radius:50%;border:5px solid #FFD700">
-      <h2 style="color:#0A6B2E">Fresh • Affordable • Fast Delivery</h2>
-    </div>
-    <div class="grid">
-      {% for p in products %}
-      <div class="card">
-        <div style="font-size:40px">{{p.emoji}}</div>
-        <div style="font-weight:800">{{p.name}} - {{p.unit}}</div>
-        <div class="price">Shs. {{p.price}}</div>
-        <button class="add" onclick="order('{{p.name}}', {{p.price}})">Add to cart</button>
-      </div>
-      {% endfor %}
-    </div>
-    <script>
-    function order(name, price){
-      let phone=prompt("Enter MTN/Airtel number 256...");
-      let loc=prompt("Delivery location?");
-      let msg=`New Order Kyambogo: ${name} UGX ${price} Phone: ${phone} Loc: ${loc}`;
-      window.open(`https://wa.me/256791734789?text=${encodeURIComponent(msg)}`);
-    }
-    </script>
-    </body>
-    </html>
-    """
-    from flask import render_template_string as rts
-    return rts(html, products=PRODUCTS)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FOOD STORE & GROCERY - KYAMBOGO</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#f5f7f0}
+.header{background:#1b5e20;color:white;padding:12px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between}
+.logo-small{width:45px;height:45px;border-radius:50%;background:white;padding:2px}
+.header-text{flex:1;margin-left:10px}
+.header-text h1{font-size:13px}
+.header-text p{font-size:10px;opacity:0.9}
+.cart-btn{background:#ffeb3b;color:#000;padding:8px 12px;border-radius:20px;font-weight:bold;border:none;cursor:pointer}
+.banner{text-align:center;padding:20px;background:white;margin:10px;border-radius:15px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.banner img{width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid #1b5e20}
+.cat-bar{display:flex;overflow-x:auto;gap:8px;padding:10px 10px;position:sticky;top:56px;background:#f5f7f0;z-index:90}
+.cat-bar button{white-space:nowrap;padding:8px 15px;border-radius:20px;border:1px solid #1b5e20;background:white;color:#1b5e20;font-weight:bold;cursor:pointer}
+.cat-bar button.active{background:#1b5e20;color:white}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:white;border-radius:15px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.card .emoji{font-size:40px}
+.card h3{font-size:13px;margin:6px 0;min-height:32px}
+.card .price{color:#1b5e20;font-weight:bold;font-size:14px}
+.card button{background:#1b5e20;color:white;border:none;padding:8px 0;width:100%;border-radius:8px;margin-top:8px;font-weight:bold;cursor:pointer}
+.cart-panel{position:fixed;bottom:0;left:0;right:0;background:white;border-top-left-radius:20px;border-top-right-radius:20px;box-shadow:0 -5px 20px rgba(0,0,0,0.2);padding:15px;max-height:85vh;overflow-y:auto;display:none;z-index:200}
+.cart-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
+.whatsapp-btn
