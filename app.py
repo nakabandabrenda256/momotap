@@ -1,89 +1,85 @@
-from flask import Flask, render_template_string, request
-import requests, uuid, base64
+from flask import Flask, render_template_string, send_file, request
+import os
 
 app = Flask(__name__)
 
-# YOUR PRODUCTS - Kyambogo Market Price
+# YOUR PRODUCTS - Kyambogo Market Prices
 PRODUCTS = [
     {"name": "Matooke", "price": 20000, "unit": "bunch", "emoji": "🍌"},
     {"name": "Cassava Bunch", "price": 3000, "unit": "bunch", "emoji": "🥔"},
     {"name": "Beans", "price": 6000, "unit": "kg", "emoji": "🫘"},
     {"name": "Posho", "price": 2000, "unit": "kg", "emoji": "🌽"},
-    {"name": "Cooking Oil", "price": 3500, "unit": "1 litre", "emoji": "🛢️"},
+    {"name": "Cooking Oil", "price": 3500, "unit": "litre", "emoji": "🛢️"},
     {"name": "Rice", "price": 4500, "unit": "kg", "emoji": "🍚"},
 ]
 
-# MTN + AIRTEL KEYS - Put your real keys here
-MTN_SUB_KEY = "YOUR_MTN_SUBSCRIPTION_KEY"
-MTN_API_USER = "YOUR_MTN_API_USER"
-MTN_API_KEY = "YOUR_MTN_API_KEY"
+# READ KEYS FROM RENDER SECRET FILES OR ENV - SAFE!
+MTN_SUB_KEY = os.environ.get("MTN_SUB_KEY") or open("/etc/secrets/MTN_SUB_KEY","r").read().strip() if os.path.exists("/etc/secrets/MTN_SUB_KEY") else "YOUR_KEY_HERE"
+MTN_API_USER = os.environ.get("MTN_API_USER") or "43124307-..."
+MTN_API_KEY = os.environ.get("MTN_API_KEY") or "YOUR_LIVE_KEY_FROM_MTN"
 
-AIRTEL_CLIENT_ID = "YOUR_AIRTEL_CLIENT_ID"
-AIRTEL_CLIENT_SECRET = "YOUR_AIRTEL_SECRET"
+# FIX LOGO - Serve it!
+@app.route('/logo.png')
+def logo():
+    if os.path.exists("static/logo.png"):
+        return send_file("static/logo.png", mimetype='image/png')
+    if os.path.exists("logo.png"):
+        return send_file("logo.png", mimetype='image/png')
+    return "Logo not found - upload to static/logo.png", 404
 
-HTML = """
-<html><head><meta name="viewport" content="width=device-width">
-<style>
-body{font-family:sans-serif;background:#f0fff0;padding:10px}
-.card{background:white;padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 2px 5px #ccc}
-.btn{padding:12px 20px;border:none;border-radius:8px;color:white;font-weight:bold;width:100%;margin:5px 0}
-.mtn{background:#ffcc00;color:black} .airtel{background:#ff0000}
-input{width:100%;padding:12px;margin:5px 0;border-radius:8px;border:1px solid #ccc}
-</style></head><body>
-<h1>🟢 MomoTap - Kyambogo Market</h1>
-<p>Fresh market products - Pay with MTN or Airtel</p>
-{% for p in products %}
-<div class="card">
-<h3>{{p.emoji}} {{p.name}} - {{p.unit}}</h3>
-<p><b>Shs. {{p.price}}</b></p>
-<form method="POST" action="/pay">
-<input type="hidden" name="amount" value="{{p.price}}">
-<input type="hidden" name="product" value="{{p.name}}">
-<input name="phone" placeholder="Enter 2567... MTN or 25675... Airtel" required>
-<button class="btn mtn" name="method" value="mtn">Pay with MTN MoMo</button>
-<button class="btn airtel" name="method" value="airtel">Pay with Airtel Money</button>
-</form>
-</div>
-{% endfor %}
-</body></html>
-"""
-
-@app.route("/")
+@app.route('/')
 def home():
-    return render_template_string(HTML, products=PRODUCTS)
-
-@app.route("/pay", methods=["POST"])
-def pay():
-    phone = request.form["phone"]
-    amount = request.form["amount"]
-    product = request.form["product"]
-    method = request.form["method"]
-    ref = str(uuid.uuid4())
-    
-    if method == "mtn":
-        # MTN REAL PROMPT
-        try:
-            auth = base64.b64encode(f"{MTN_API_USER}:{MTN_API_KEY}".encode()).decode()
-            token = requests.post("https://sandbox.momodeveloper.mtn.com/collection/token/",
-                headers={"Authorization": f"Basic {auth}", "Ocp-Apim-Subscription-Key": MTN_SUB_KEY}).json()["access_token"]
-            r = requests.post("https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay",
-                headers={"Authorization": f"Bearer {token}", "X-Reference-Id": ref, "X-Target-Environment": "sandbox", "Ocp-Apim-Subscription-Key": MTN_SUB_KEY},
-                json={"amount": amount, "currency": "UGX", "externalId": ref, "payer": {"partyIdType": "MSISDN", "partyId": phone}, "payerMessage": product, "payeeNote": "MomoTap"})
-            return f"<h1>MTN Prompt Sent to {phone}!</h1><p>Check phone for PIN. Product: {product} - {amount} UGX<br>Ref: {ref}</p><a href='/'>Back</a>" if r.status_code==202 else f"MTN Error: {r.text}"
-        except Exception as e:
-            return f"MTN Setup Needed: {e}. Add your MTN keys first!"
-    
-    else:
-        # AIRTEL REAL PROMPT
-        try:
-            token = requests.post("https://openapiuat.airtel.africa/auth/oauth2/token",
-                json={"client_id": AIRTEL_CLIENT_ID, "client_secret": AIRTEL_CLIENT_SECRET, "grant_type": "client_credentials"}).json()["access_token"]
-            r = requests.post("https://openapiuat.airtel.africa/merchant/v1/payments/",
-                headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json", "X-Country": "UG", "X-Currency": "UGX"},
-                json={"reference": ref, "subscriber": {"country": "UG", "currency": "UGX", "msisdn": phone}, "transaction": {"amount": int(amount), "country": "UG", "currency": "UGX", "id": ref}})
-            return f"<h1>Airtel Prompt Sent to {phone}!</h1><p>Check phone for PIN. Product: {product} - {amount} UGX<br>Ref: {ref}</p><a href='/'>Back</a>" if r.status_code in [200,202] else f"Airtel Error: {r.text}"
-        except Exception as e:
-            return f"Airtel Setup Needed: {e}. Add your Airtel keys first!"
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Store & Grocery - Kyambogo 256</title>
+    <style>
+    body{margin:0;font-family:system-ui;background:#F6FFF6}
+    header{background:#0A6B2E;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:900}
+    .logo img{width:50px;height:50px;border-radius:50%;border:3px solid #FFD700;background:white}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+    .card{background:white;border-radius:16px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    .price{color:#0A6B2E;font-weight:900}
+    button.add{background:#111;color:white;border:none;padding:8px 14px;border-radius:8px;margin-top:6px;width:100%}
+    </style>
+    </head>
+    <body>
+    <header>
+      <div class="logo">
+        <img src="/logo.png" onerror="this.src='/static/logo.png'">
+        <div>FOOD STORE & GROCERY<br><small style="color:#FFD700">KAMPALA UG @ KYAMBOGO 256<br>0791734789</small></div>
+      </div>
+      <div>🛒</div>
+    </header>
+    <div style="text-align:center;padding:14px;background:white">
+      <img src="/logo.png" onerror="this.src='/static/logo.png'" style="width:140px;height:140px;border-radius:50%;border:5px solid #FFD700">
+      <h2 style="color:#0A6B2E">Fresh • Affordable • Fast Delivery</h2>
+    </div>
+    <div class="grid">
+      {% for p in products %}
+      <div class="card">
+        <div style="font-size:40px">{{p.emoji}}</div>
+        <div style="font-weight:800">{{p.name}} - {{p.unit}}</div>
+        <div class="price">Shs. {{p.price}}</div>
+        <button class="add" onclick="order('{{p.name}}', {{p.price}})">Add to cart</button>
+      </div>
+      {% endfor %}
+    </div>
+    <script>
+    function order(name, price){
+      let phone=prompt("Enter MTN/Airtel number 256...");
+      let loc=prompt("Delivery location?");
+      let msg=`New Order Kyambogo: ${name} UGX ${price} Phone: ${phone} Loc: ${loc}`;
+      window.open(`https://wa.me/256791734789?text=${encodeURIComponent(msg)}`);
+    }
+    </script>
+    </body>
+    </html>
+    """
+    from flask import render_template_string as rts
+    return rts(html, products=PRODUCTS)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=10000)
