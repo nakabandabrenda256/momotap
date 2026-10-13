@@ -1,21 +1,39 @@
-<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><title>MOMOTAP - DR MUNYAANGO ALEX | BUSIA SOPHIA & KYAMBOGO</title><style>body{margin:0;font-family:Arial;background:#111;color:white;text-align:center}.top{background:#ff3d00;padding:12px;font-weight:bold}.top b{font-size:22px}.card{margin:15px;background:white;color:#222;border-radius:18px;padding:18px;box-shadow:0 5px 20px rgba(0,0,0,.4)}.card img{width:100%;height:140px;object-fit:cover;border-radius:12px}.card h2{margin:10px 0 5px}.btn{display:block;padding:14px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:18px;margin-top:10px}.food{background:#2e7d32;color:white}.herb{background:#ff3d00;color:white}.tiny{font-size:11px;color:#777;margin-top:20px}</style></head><body>
-<div class=top>🔴 MOMOTAP GROUP - ONE TILL <b>7248947</b> | 0746428184 | MUGUMYA ALEX</div>
-<h1 style=margin:20px 0 5px>Welcome to MOMOTAP</h1><p style=margin:0 0 15px>Choose Your Store ↓</p>
-
-<div class=card>
-<img src=https://images.unsplash.com/photo-1542838132-92c53300491e>
-<h2>🛒 SHOPRITE FOOD STORE</h2><p>Kyambogo • Banda • Kireka • Food Delivery</p><p style=color:#ff3d00;font-weight:bold>Shs 2k-15k | Fast Delivery</p>
-<a class="btn food" href="https://momotap.onrender.com">ENTER FOOD STORE →</a>
-<p style=font-size:12px>Link: momotap.onrender.com (food)</p>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Momotap Herbs - Busia Sophia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#fff8e7;margin:0;padding:0}
+.header{background:#8B4513;color:white;padding:20px;text-align:center}
+.products{padding:15px}
+.item{background:white;border-radius:12px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #ddd;display:flex;justify-content:space-between;align-items:center}
+button{background:#25D366;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold}
+a.back{display:block;text-align:center;margin:20px;color:#8B4513}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>🌿 MOMOTAP HERBS</h1>
+<p>Busia Sophia Border - Natural Wellness</p>
+<p>Till: 7248947</p>
 </div>
 
-<div class=card>
-<img src=https://images.unsplash.com/photo-1446071103084-c257b5f70672>
-<h2>🌿 DR MUNYAANGO ALEX</h2><p style=background:#e8f5e9;display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;color:#1b5e20;font-weight:bold>📍 BUSIA SOPHIA BORDER BRANCH</p><p>SAVE LIFE THROUGH NATURE - Herbal Wellness - Uganda & Kenya Border</p><p style=color:#1b5e20;font-weight:bold>Shs 15k-80k | Natural Herbs</p>
-<a class="btn herb" href="nature.html">ENTER HERBAL STORE →</a>
-<p style=font-size:12px>Link: momotap.onrender.com/nature.html</p>
+<div class="products">
+<div class="item"><span>🌱 Moringa Powder - 10k</span><button onclick="order('Moringa')">Order</button></div>
+<div class="item"><span>🍵 Herbal Tea Mix - 15k</span><button onclick="order('Herbal Tea')">Order</button></div>
+<div class="item"><span>💪 Manpower Herbs - 20k</span><button onclick="order('Manpower')">Order</button></div>
+<div class="item"><span>🌸 Women's Wellness - 15k</span><button onclick="order('Womens Wellness')">Order</button></div>
 </div>
 
-<div class=tiny>TIN 1060092806 | Airtel Till 7248947 | 0746428184 | Busia Sophia & Kyambogo<br>One Line Serves All Sides 🇺🇬🇰🇪</div>
+<a class="back" href="./index.html">← Back to Main Mall (Food & Herbs)</a>
 
-</body></html>
+<script>
+function order(product){
+let till="7248947";
+let msg=`Hello Momotap Herbs Busia Sophia, I want ${product}. Till ${till}`;
+window.open(`https://wa.me/256700000000?text=${encodeURIComponent(msg)}`,"_blank");
+}
+</script>
+</body>
+</html>
