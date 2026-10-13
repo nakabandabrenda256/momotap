@@ -1,21 +1,21 @@
-<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><title>DR MUNYAANGO ALEX - BUSIA SOPHIA BRANCH | 0746428184</title><style>body{margin:0;font-family:Arial;background:#f1f8e9}.h{background:linear-gradient(90deg,#1b5e20,#33691e);color:white;padding:14px;position:sticky;top:0;display:flex;justify-content:space-between;z-index:9;align-items:center}.t{background:#ff3d00;color:white;text-align:center;padding:12px;font-weight:bold}.t b{font-size:24px;display:block}.hero{background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url(https://images.unsplash.com/photo-1446071103084-c257b5f70672);background-size:cover;color:white;padding:35px 15px;text-align:center}.g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}.c{background:white;border-radius:14px;padding:12px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.15);border-left:5px solid #2e7d32}.c b{color:#1b5e20;font-size:13px}.pr{color:#ff3d00;font-weight:bold}.c button{background:#2e7d32;color:white;border:none;padding:9px;width:100%;border-radius:20px;margin-top:6px;font-weight:bold}.cart{position:fixed;bottom:0;left:0;right:0;background:white;padding:15px;border-radius:20px 20px 0 0;display:none;max-height:85vh;overflow:auto;box-shadow:0 -10px 30px rgba(0,0,0,.4);z-index:99}.dis{background:#fff8e1;border:2px dashed #ff9800;padding:10px;margin:10px;border-radius:10px;font-size:11px}</style></head><body>
-<div class=h><div><b>🌿 DR MUNYAANGO ALEX</b><div style=font-size:11px>SAVE LIFE THROUGH NATURE - BUSIA SOPHIA BRANCH</div></div><button onclick=openCart() style=background:white;color:#2e7d32;border:none;padding:8px 12px;border-radius:20px;font-weight:bold>🛒<span id=ct>0</span></button></div>
-<div class=t>🔴 AIRTEL TILL <b>7248947</b> | DR MUNYAANGO ALEX | BUSIA SOPHIA | 0746428184</div>
-<div class=hero><h1>DR MUNYAANGO ALEX</h1><h3 style=margin:5px 0>SAVE LIFE THROUGH NATURE</h3><p style=background:#ff3d00;display:inline-block;padding:6px 14px;border-radius:20px>📍 BUSIA SOPHIA BRANCH - BORDER (UG/KE)</p><p>Traditional Herbal Wellness Support<br>Busia Sophia | Busia Town | Kenya Border</p></div>
-<div class=dis>⚠️ <b>DISCLAIMER:</b> Traditional Herbal Practitioner (Not medical doctor). Products SUPPORT wellness, NOT cures. Not evaluated by NDA. For heart/serious illness see health facility. Busia Sophia Branch serves Uganda & Kenya border community.</div>
-<div class=g id=grid></div>
-<div class=cart id=cb><button style=float:right;background:#eee;border:none;border-radius:50%;width:30px;height:30px onclick=closeCart()>X</button><h3>🛒 DR MUNYAANGO ALEX - BUSIA</h3><div id=its></div><h3 id=tot>Total: 0</h3><button style="background:#ff3d00;color:white;width:100%;padding:13px;border:none;border-radius:12px;margin-top:8px;font-weight:bold" onclick=pay()>🔴 PAY TILL 7248947</button><button style="background:#25D366;color:white;width:100%;padding:13px;border:none;border-radius:12px;margin-top:8px;font-weight:bold" onclick=wa()>🟢 WHATSAPP 0746428184</button></div>
-<script>
-p=[
-{n:"Men Vitality Tea",pr:30000},{n:"Strength & Stamina Mix",pr:35000},{n:"Piles / Hemorrhoids Comfort",pr:25000},{n:"Heart Wellness Tea",pr:20000},{n:"Pressure Balance Herbs",pr:18000},{n:"Sugar Balance Support",pr:20000},{n:"Full Body Detox",pr:20000},{n:"Immunity Booster",pr:15000},{n:"Stomach Ulcers Comfort",pr:20000},{n:"Traditional Blessings Herbs",pr:25000},{n:"Women Wellness Tea",pr:20000},{n:"Joint & Back Comfort",pr:25000},{n:"Asthma & Chest Support",pr:22000},{n:"Kidney Cleanse",pr:20000},{n:"Manhood Cleanser",pr:30000},{n:"Weight Gain Herbs",pr:25000},{n:"Weight Loss Tea",pr:20000},{n:"Skin & Allergy Mix",pr:18000},{n:"Child Appetite Support",pr:15000},{n:"Super Combo All Support Pack",pr:80000}
-];
-c=[];function rend(){h="";for(i=0;i<p.length;i++){h+="<div class=c><b>"+p[i].n+"</b><div style=font-size:11px;color:#555;margin:4px 0>Supports natural wellness</div><div class=pr>Shs "+p[i].pr+"</div><button onclick=add("+i+")>Add</button></div>";}document.getElementById("grid").innerHTML=h;}
-function add(i){e=null;for(j=0;j<c.length;j++)if(c[j].i==i)e=c[j];if(e)e.q++;else c.push({i:i,n:p[i].n,pr:p[i].pr,q:1});up();openCart();}
-function up(){t=0;for(k=0;k<c.length;k++)t+=c[k].q;document.getElementById("ct").innerText=t;}
-function openCart(){rc();document.getElementById("cb").style.display="block";}function closeCart(){document.getElementById("cb").style.display="none";}
-function rc(){h="";to=0;for(k=0;k<c.length;k++){h+="<div style=padding:6px;border-bottom:1px solid #eee;display:flex;justify-content:space-between>"+c[k].n+" x"+c[k].q+" <span>Shs "+(c[k].pr*c[k].q)+" <button onclick=rem("+k+")>X</button></span></div>";to+=c[k].pr*c[k].q;}document.getElementById("its").innerHTML=h||"Empty";document.getElementById("tot").innerText="Total: Shs "+to;}
-function rem(k){c.splice(k,1);rc();up();}
-function pay(){to=0;for(k=0;k<c.length;k++)to+=c[k].pr*c[k].q;alert("DR MUNYAANGO ALEX - BUSIA SOPHIA\nPay Shs "+to+" to Till 7248947\nDial *185*4*3#\nTill:7248947");}
-function wa(){to=0;for(k=0;k<c.length;k++)to+=c[k].pr*c[k].q;m="Hello DR MUNYAANGO ALEX BUSIA SOPHIA%0A Till 7248947 Order:%0A";for(k=0;k<c.length;k++)m+=c[k].n+" x"+c[k].q+"%0A";m+="Total Shs "+to+"%0A My Location: Busia Sophia%0A My Name:";window.open("https://wa.me/256746428184?text="+m);}
-rend();
-</script></body></html>
+<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><title>MOMOTAP - DR MUNYAANGO ALEX | BUSIA SOPHIA & KYAMBOGO</title><style>body{margin:0;font-family:Arial;background:#111;color:white;text-align:center}.top{background:#ff3d00;padding:12px;font-weight:bold}.top b{font-size:22px}.card{margin:15px;background:white;color:#222;border-radius:18px;padding:18px;box-shadow:0 5px 20px rgba(0,0,0,.4)}.card img{width:100%;height:140px;object-fit:cover;border-radius:12px}.card h2{margin:10px 0 5px}.btn{display:block;padding:14px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:18px;margin-top:10px}.food{background:#2e7d32;color:white}.herb{background:#ff3d00;color:white}.tiny{font-size:11px;color:#777;margin-top:20px}</style></head><body>
+<div class=top>🔴 MOMOTAP GROUP - ONE TILL <b>7248947</b> | 0746428184 | MUGUMYA ALEX</div>
+<h1 style=margin:20px 0 5px>Welcome to MOMOTAP</h1><p style=margin:0 0 15px>Choose Your Store ↓</p>
+
+<div class=card>
+<img src=https://images.unsplash.com/photo-1542838132-92c53300491e>
+<h2>🛒 SHOPRITE FOOD STORE</h2><p>Kyambogo • Banda • Kireka • Food Delivery</p><p style=color:#ff3d00;font-weight:bold>Shs 2k-15k | Fast Delivery</p>
+<a class="btn food" href="https://momotap.onrender.com">ENTER FOOD STORE →</a>
+<p style=font-size:12px>Link: momotap.onrender.com (food)</p>
+</div>
+
+<div class=card>
+<img src=https://images.unsplash.com/photo-1446071103084-c257b5f70672>
+<h2>🌿 DR MUNYAANGO ALEX</h2><p style=background:#e8f5e9;display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;color:#1b5e20;font-weight:bold>📍 BUSIA SOPHIA BORDER BRANCH</p><p>SAVE LIFE THROUGH NATURE - Herbal Wellness - Uganda & Kenya Border</p><p style=color:#1b5e20;font-weight:bold>Shs 15k-80k | Natural Herbs</p>
+<a class="btn herb" href="nature.html">ENTER HERBAL STORE →</a>
+<p style=font-size:12px>Link: momotap.onrender.com/nature.html</p>
+</div>
+
+<div class=tiny>TIN 1060092806 | Airtel Till 7248947 | 0746428184 | Busia Sophia & Kyambogo<br>One Line Serves All Sides 🇺🇬🇰🇪</div>
+
+</body></html>
