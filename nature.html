@@ -1,39 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Momotap Herbs - Busia Sophia</title>
+<title>MOMOTAP HERBS - Busia Sophia</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:Arial;background:#fff8e7;margin:0;padding:0}
-.header{background:#8B4513;color:white;padding:20px;text-align:center}
-.products{padding:15px}
-.item{background:white;border-radius:12px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #ddd;display:flex;justify-content:space-between;align-items:center}
-button{background:#25D366;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:bold}
-a.back{display:block;text-align:center;margin:20px;color:#8B4513}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#fcfaf6}
+.header{background:white;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 12px #eee;position:sticky;top:0;z-index:10}
+.logo-img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.logo-text{line-height:1.2}
+.logo-text b{font-size:17px;color:#5a320a}
+.logo-text p{font-size:11px;color:#8B4513}
+.cart{margin-left:auto;font-size:22px;position:relative}
+.count{position:absolute;top:-8px;right:-8px;background:#8B4513;color:white;font-size:10px;padding:2px 6px;border-radius:50%}
+.banner{background:linear-gradient(135deg,#8B4513,#4a7c59);color:white;padding:20px;text-align:center}
+.banner h1{font-size:22px}
+.banner p{font-size:13px;opacity:.9;margin-top:4px}
+.search{margin:15px;background:white;border-radius:12px;display:flex;padding:10px 15px;box-shadow:0 2px 8px #eee}
+.search input{border:none;flex:1;outline:none;font-size:14px}
+.grid{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #e9e0d0}
+.card img{width:100%;height:110px;object-fit:cover}
+.card-body{padding:10px}
+.card-body h3{font-size:13px;color:#333;height:32px;overflow:hidden}
+.price{color:#8B4513;font-weight:700;font-size:14px;margin:5px 0}
+.old{color:#999;font-size:11px;text-decoration:line-through;margin-left:5px}
+.btn{width:100%;background:#25D366;color:white;border:none;padding:8px;border-radius:8px;font-weight:600;font-size:12px;margin-top:4px}
+.btn:active{background:#128C7E}
+.list-view{padding:10px}
+.list-card{background:white;border-radius:14px;display:flex;gap:12px;padding:12px;margin-bottom:10px;box-shadow:0 2px 8px #eee;align-items:center}
+.list-card img{width:64px;height:64px;border-radius:10px;object-fit:cover}
+.info{flex:1}
+.info h3{font-size:14px}
+.info p{font-size:11px;color:#777}
+.till{background:white;text-align:center;padding:15px;margin:15px;border-radius:12px;border:2px dashed #8B4513}
+.order-bar{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 16px;display:flex;gap:10px;box-shadow:0 -3px 15px #ccc}
+.order-bar button{flex:1;padding:12px;border-radius:12px;border:none;font-weight:700}
+.check{background:#8B4513;color:white}
 </style>
 </head>
 <body>
+
 <div class="header">
-<h1>🌿 MOMOTAP HERBS</h1>
-<p>Busia Sophia Border - Natural Wellness</p>
-<p>Till: 7248947</p>
+<img class="logo-img" src="https://i.imgur.com/Q2F5K7L.png" onerror="this.src='https://via.placeholder.com/100/8B4513/fff?text=M'" alt="logo">
+<div class="logo-text"><b>MOMOTAP HERBS</b><p>Busia Sophia • Natural Wellness</p></div>
+<div class="cart">🛒<span class="count" id="c">0</span></div>
 </div>
 
-<div class="products">
-<div class="item"><span>🌱 Moringa Powder - 10k</span><button onclick="order('Moringa')">Order</button></div>
-<div class="item"><span>🍵 Herbal Tea Mix - 15k</span><button onclick="order('Herbal Tea')">Order</button></div>
-<div class="item"><span>💪 Manpower Herbs - 20k</span><button onclick="order('Manpower')">Order</button></div>
-<div class="item"><span>🌸 Women's Wellness - 15k</span><button onclick="order('Womens Wellness')">Order</button></div>
+<div class="banner">
+<h1>🌿 Natural Herbs Store</h1>
+<p>Premium Quality • Pay Till 7248947 • Busia Sophia Border</p>
 </div>
 
-<a class="back" href="./index.html">← Back to Main Mall (Food & Herbs)</a>
+<div class="search"><span>🔍</span><input id="s" oninput="filter()" placeholder="Search herbs... e.g. Moringa, Tea"></div>
+
+<div class="grid" id="grid">
+<!-- PRODUCTS - MANY LISTS -->
+<div class="card" data-name="Moringa Powder"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=300"><div class="card-body"><h3>Moringa Powder 250g</h3><div><span class="price">10k</span><span class="old">15k</span></div><button class="btn" onclick="add('Moringa 250g - 10k')">Add to Cart</button></div></div>
+<div class="card" data-name="Herbal Tea"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=300"><div class="card-body"><h3>Detox Herbal Tea 100g</h3><div><span class="price">15k</span><span class="old">20k</span></div><button class="btn" onclick="add('Herbal Tea - 15k')">Add to Cart</button></div></div>
+<div class="card" data-name="Manpower"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300"><div class="card-body"><h3>Manpower Herbs Mix</h3><div><span class="price">20k</span><span class="old">25k</span></div><button class="btn" onclick="add('Manpower - 20k')">Add to Cart</button></div></div>
+<div class="card" data-name="Women Wellness"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=300"><div class="card-body"><h3>Women's Wellness Herbs</h3><div><span class="price">15k</span><span class="old">18k</span></div><button class="btn" onclick="add('Women Wellness - 15k')">Add to Cart</button></div></div>
+<div class="card" data-name="Neem Powder"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=300"><div class="card-body"><h3>Neem Powder 200g</h3><div><span class="price">12k</span></div><button class="btn" onclick="add('Neem - 12k')">Add to Cart</button></div></div>
+<div class="card" data-name="Baobab"><img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300"><div class="card-body"><h3>Baobab Powder 250g</h3><div><span class="price">18k</span></div><button class="btn" onclick="add('Baobab - 18k')">Add to Cart</button></div></div>
+<div class="card" data-name="Turmeric"><img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=300"><div class="card-body"><h3>Turmeric Powder 150g</h3><div><span class="price">10k</span></div><button class="btn" onclick="add('Turmeric - 10k')">Add to Cart</button></div></div>
+<div class="card" data-name="Ginger"><img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=300"><div class="card-body"><h3>Ginger Powder 200g</h3><div><span class="price">8k</span></div><button class="btn" onclick="add('Ginger - 8k')">Add to Cart</button></div></div>
+</div>
+
+<div class="till"><b>💳 Pay: Till Number 7248947</b><br><span style="font-size:12px">Name: Momotap | Delivery Busia & Kenya Side</span></div>
+
+<div style="height:90px"></div>
+<div class="order-bar"><button class="check" onclick="checkout()">🛒 Checkout • <span id="tot">0 items</span></button></div>
 
 <script>
-function order(product){
-let till="7248947";
-let msg=`Hello Momotap Herbs Busia Sophia, I want ${product}. Till ${till}`;
-window.open(`https://wa.me/256700000000?text=${encodeURIComponent(msg)}`,"_blank");
-}
-</script>
-</body>
-</html>
+let ca
