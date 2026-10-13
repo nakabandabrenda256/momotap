@@ -1,124 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>MOMOTAP HERBS - 35 Items - Till Pay</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<title>MOMOTAP HERBS - Busia Sophia</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#fdfaf5;padding-bottom:85px}
-.header{background:white;padding:12px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 10px #eee;position:sticky;top:0;z-index:10}
-.logo{width:46px;height:46px;background:#8B4513;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px}
-.cart{margin-left:auto;position:relative;font-size:22px}
-.cnt{position:absolute;top:-7px;right:-7px;background:#8B4513;color:white;font-size:10px;padding:2px 6px;border-radius:50%}
-.banner{background:linear-gradient(90deg,#8B4513,#5a7d2a);color:white;text-align:center;padding:14px}
-.list{padding:10px}
-.row{background:white;display:flex;gap:10px;padding:11px;margin-bottom:8px;border-radius:12px;box-shadow:0 2px 6px #eee;align-items:center}
-.row img{width:58px;height:58px;border-radius:10px;object-fit:cover}
-.inf{flex:1}
-.inf h3{font-size:13px;color:#222}
-.inf p{font-size:10px;color:#777}
-.pr{font-weight:700;color:#8B4513;font-size:13px}
-.btn{margin-left:auto;background:#25D366;color:white;border:none;padding:7px 13px;border-radius:8px;font-size:11px;font-weight:600}
-.till{text-align:center;background:white;margin:10px;padding:13px;border-radius:10px;border:2px dashed #8B4513}
-.bar{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px;box-shadow:0 -2px 10px #ccc}
-.bar button{width:100%;background:#8B4513;color:white;border:none;padding:13px;border-radius:12px;font-weight:700}
-/* POPUP */
-.popup{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
-.box{background:white;border-radius:16px;padding:20px;width:100%;max-width:360px}
-.box h2{text-align:center;color:#8B4513;font-size:18px}
-.item-list{background:#f9f6f0;padding:10px;border-radius:10px;margin:12px 0;font-size:12px;max-height:150px;overflow-y:auto}
-.opt{border:2px solid #eee;border-radius:12px;padding:12px;margin:8px 0;cursor:pointer}
-.opt.active{border-color:#8B4513;background:#fdf6ec}
-.opt b{display:block;font-size:13px}
-.opt span{font-size:11px;color:#666}
-.ussd{background:#111;color:#0f0;padding:10px;border-radius:8px;text-align:center;font-family:monospace;font-size:16px;font-weight:700;margin:10px 0;letter-spacing:1px}
-.action{display:flex;gap:8px;margin-top:12px}
-.action button{flex:1;padding:12px;border:none;border-radius:10px;font-weight:700}
-.btn-w{background:#25D366;color:white}
-.btn-t{background:#8B4513;color:white}
-.btn-c{background:#eee}
+body{margin:0;font-family:sans-serif;background:#f5f5f5}
+.head{background:#2e7d32;color:white;padding:14px;text-align:center;font-weight:700;position:sticky;top:0;z-index:5}
+.grid{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:white;border-radius:10px;padding:12px;text-align:center;box-shadow:0 2px 5px #ccc}
+.card b{font-size:12px;display:block;height:30px}
+.card span{font-size:12px;color:#333}
+.card button{width:100%;margin-top:8px;background:#2e7d32;color:white;border:0;padding:8px;border-radius:6px;font-weight:700}
+.order{background:white;margin:12px;border-radius:12px;padding:14px;box-shadow:0 2px 10px #ccc}
+.item{font-size:13px;padding:6px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between}
+.total{font-weight:700;display:flex;justify-content:space-between;margin-top:10px;font-size:16px}
+.red{width:100%;background:#d32f2f;color:white;border:0;padding:13px;border-radius:8px;font-weight:700;margin-top:12px}
+.green{width:100%;background:#25D366;color:white;border:0;padding:13px;border-radius:8px;font-weight:700;margin-top:8px}
+.ussd{background:#111;color:#0f0;text-align:center;padding:8px;border-radius:6px;margin-top:8px;font-family:monospace;font-weight:700}
 </style>
 </head>
 <body>
 
-<div class="header">
-<div class="logo">MOMOTAP</div>
-<div><b style="font-size:14px">MOMOTAP HERBS</b><br><span style="font-size:10px;color:#8B4513">Busia Sophia • Till 7248947</span></div>
-<div class="cart">🛒<span class="cnt" id="c">0</span></div>
+<div class="head">🌿 MOMOTAP HERBS - Busia Sophia<br><small>Till 7248947 • From 15k • WhatsApp 0746428184</small></div>
+
+<div class="grid" id="grid"></div>
+
+<div class="order">
+<h3 style="margin:0 0 8px 0">Your Order <small id="count" style="float:right;color:#888">0 items</small></h3>
+<div id="list" style="color:#888;font-size:13px">No items yet. Tap Add.</div>
+<div class="total"><span>Total:</span><span>Shs <span id="total">0</span></span></div>
+<button class="red" onclick="payTill()">Pay Till 7248947</button>
+<div class="ussd">Dial *185*4*3# → Till 7248947</div>
+<small style="display:block;text-align:center;margin-top:4px;color:#666">Till Name: MOMOTAP HERBS</small>
+<button class="green" onclick="wa()">WhatsApp Order - 0746428184</button>
 </div>
 
-<div class="banner">
-<b>🌿 35 Natural Herbs • From 15k • Till 7248947</b><br>
-<span style="font-size:11px">Pay with Till or WhatsApp • Delivery UG & KE</span>
-</div>
-
-<div class="list">
-<!-- 35 ITEMS - SAME AS BEFORE - PRICES FROM 15K -->
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>1. Moringa Powder 250g</h3><p>Energy</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('1. Moringa 250g - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>2. Neem Powder 200g</h3><p>Skin & Sugar</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('2. Neem - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=100"><div class="inf"><h3>3. Ginger Powder 250g</h3><p>Digestion</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('3. Ginger - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=100"><div class="inf"><h3>4. Turmeric Powder 250g</h3><p>Joints</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('4. Turmeric - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100"><div class="inf"><h3>5. Baobab Powder 300g</h3><p>Vitamin C</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('5. Baobab - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>6. Black Seed Oil 60ml</h3><p>Immunity</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('6. Black Seed - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=100"><div class="inf"><h3>7. Detox Tea 100g</h3><p>Cleanse</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('7. Detox Tea - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=100"><div class="inf"><h3>8. Slimming Tea 100g</h3><p>Flat Tummy</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('8. Slimming Tea - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=100"><div class="inf"><h3>9. Manpower Small 100g</h3><p>Power</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('9. Manpower - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=100"><div class="inf"><h3>10. Women Wellness 100g</h3><p>Hormone</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('10. Women Wellness - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100"><div class="inf"><h3>11. Sea Moss 100g</h3><p>92 Minerals</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('11. Sea Moss - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>12. Ashwagandha 100g</h3><p>Stress</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('12. Ashwagandha - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>13. Cinnamon 150g</h3><p>Sugar</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('13. Cinnamon - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=100"><div class="inf"><h3>14. Garlic Powder 150g</h3><p>Pressure</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('14. Garlic - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>15. Cloves 100g</h3><p>Teeth</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('15. Cloves - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>16. Black Pepper 150g</h3><p>Digestion</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('16. Black Pepper - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>17. Fenugreek 200g</h3><p>Women</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('17. Fenugreek - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=100"><div class="inf"><h3>18. Yoni Steam 100g</h3><p>Detox</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('18. Yoni Steam - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>19. Diabetes Mix 150g</h3><p>Sugar</p><div class="pr">22,000 UGX</div></div><button class="btn" onclick="add('19. Diabetes - 22k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100"><div class="inf"><h3>20. Pressure Herbs 150g</h3><p>BP</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('20. Pressure - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>21. Arthritis Herbs 150g</h3><p>Joints</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('21. Arthritis - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1615485925600-97237c4fc1ec?w=100"><div class="inf"><h3>22. Aloe Vera 100g</h3><p>Skin</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('22. Aloe Vera - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=100"><div class="inf"><h3>23. Hibiscus 100g</h3><p>Pressure Tea</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('23. Hibiscus - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100"><div class="inf"><h3>24. Maca Root 100g</h3><p>Energy</p><div class="pr">22,000 UGX</div></div><button class="btn" onclick="add('24. Maca - 22k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=100"><div class="inf"><h3>25. Green Tea 150g</h3><p>Weight</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('25. Green Tea - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>26. Soursop Leaves 100g</h3><p>Immunity</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('26. Soursop - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>27. Dandelion Root 100g</h3><p>Liver</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('27. Dandelion - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=100"><div class="inf"><h3>28. Fertility Tea 100g</h3><p>Conceive</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('28. Fertility Tea - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100"><div class="inf"><h3>29. Ulcers Mix 150g</h3><p>Stomach</p><div class="pr">20,000 UGX</div></div><button class="btn" onclick="add('29. Ulcers - 20k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>30. Asthma Herbs 100g</h3><p>Lungs</p><div class="pr">18,000 UGX</div></div><button class="btn" onclick="add('30. Asthma - 18k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>31. Fibroids Herbs 150g</h3><p>Women</p><div class="pr">22,000 UGX</div></div><button class="btn" onclick="add('31. Fibroids - 22k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=100"><div class="inf"><h3>32. Castor Oil 60ml</h3><p>Hair</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('32. Castor Oil - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1474979266404-7eaac2926c0b?w=100"><div class="inf"><h3>33. Shea Butter 200g</h3><p>Skin</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('33. Shea Butter - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100"><div class="inf"><h3>34. Lemongrass 150g</h3><p>Fever</p><div class="pr">15,000 UGX</div></div><button class="btn" onclick="add('34. Lemongrass - 15k')">Add</button></div>
-<div class="row"><img src="https://images.unsplash.com/photo-1608571423902-eed4a94d8108?w=100"><div class="inf"><h3>35. Full Body Cleanse 200g</h3><p>Detox</p><div class="pr">25,000 UGX</div></div><button class="btn" onclick="add('35. Full Body Cleanse - 25k')">Add</button></div>
-</div>
-
-<div class="till"><b>💳 TILL NUMBER: 7248947</b><br><span style="font-size:11px">35 Items • From 15k • Dial *185*4*3# to Pay</span></div>
-
-<div class="bar"><button onclick="checkout()">🛒 Checkout • <span id="tot">0 items</span> • Pay Now</button></div>
-
-<!-- CHECKOUT POPUP WITH 2 OPTIONS -->
-<div class="popup" id="pop">
-<div class="box">
-<h2>🛒 Your Order</h2>
-<div class="item-list" id="ilist">No items</div>
-
-<div style="font-size:13px;margin:10px 0"><b>Total Items: <span id="pcount">0</span></b> • Till: <b>7248947</b></div>
-
-<div class="opt active" id="opt1" onclick="selectOpt(1)">
-<b>💬 OPTION 1: Order on WhatsApp</b>
-<span>Chat with us • Send order • We confirm delivery</span>
-</div>
-
-<div class="opt" id="opt2" onclick="selectOpt(2)">
-<b>💳 OPTION 2: Pay with Till Now</b>
-<span>Pay directly to Till • Fastest</span>
-<div id="tillDetails" style="display:none">
-<div class="ussd">*185*4*3#</div>
-<div style="font-size:11px;text-align:center;line-height:1.4">
-1. Dial <b>*185*4*3#</b><br>
-2. Select <b>Pay Till</b><br>
-3. Enter Till Number: <b style="color:#8B4513;font-size:14px">7248947</b><br>
-4. Enter Amount<br>
-5. Confirm with PIN<br><br>
-<b style="color:#8B4513">Till Name: MOMOTAP HERBS</b>
-</
+<script>
+var products=[
+["Moringa Powder 250g",15000],["Neem Powder 200g",15000],["Ginger Powder 250g",15000],["Turmeric Powder 250g",15000],
+["Baobab Powder 300g",18000],["Black Seed Oil 60ml",20000],["Detox Tea 100g",15000],["Slimming Tea 100g",18000],
+["Manpower Herbs 100g",20000],["Women Wellness 100g",18000],["Sea Moss 100g",20000],["Ashwagandha 100g",20000],
+["Cinnamon 150g",15000],["Garlic Powder 150g",15000],["Cloves 100g",15000],["Black Pepper 150g",15000],
+["Fenugreek 200g",15000],["Yoni Steam 100g",18000],["Diabetes Mix 150g",22000],["Pressure Herbs 150g",20000],
+["Arthritis Herbs 150g",20000],["Aloe Vera 100g",15000],["Hibiscus Flower 100g",15000],["Maca Root 100g",22000],
+["Green Tea 150g",15000],["Soursop Leaves 100g",18000],["Dandelion Root 100g",18000],["Fertility Tea 100g",20000],
+["Ulcers Mix 150g",20000],["Asthma Herbs 100g",18000],["Fibroids Herbs 150g",22000],["Castor Oil 60ml",15000],
+["Shea Butter 200g",15000],["Lemongrass 150g",15000],["Full Body Cleanse 200g",25000]
+];
+var cart={};
+var grid=document.getElementById('grid');
+for(var i=0;i<products.length;i++){
+  var name=products[i][0];
+  var price=products[i][1];
+  var div=document.createElement('div');
+  div.className='card';
+  div.innerHTML='<b>'+name+'</b><span>Shs '+price+'</span><button onclick="addItem(\''+name.replace(/'/g,"")+'\','+price+')">Add</button>';
+  grid.appendChild(div);
+}
+function addItem(name,price){
+  if(!cart[name]) cart[name]={qty:0,price:price};
+  cart[name].qty++;
+  render();
+}
+function removeItem(name){
+  delete cart[name];
+  render();
+}
+function render(){
+  var list=document.getElementById('list');
+  var total=0,count=0,html='';
+  for(var k in cart){
+    var it=cart[k];
+    var sub=it.qty*it.price;
+    total+=sub; count+=it.qty;
+    html+='<div class="item"><span>'+k+' x'+it.qty+' = '+sub+'</span><span onclick="removeItem(\''+k.replace(/'/g,"")+'\')" style="background:#eee;padding:2px 8px;border-radius:4px">X</span></div>';
+  }
+  if(count==0) list.innerHTML='No items yet. Tap Add.';
+  else list.innerHTML=html;
+  document.getElementById('total').innerText=total;
+  document.getElementById('count').innerText=count+' items';
+}
+function payTill(){
+  var t=document.getElementById('total').innerText;
+  if(t=='0'){alert('Add items first bro!');return;}
+  alert('HOW TO PAY TILL:\n\n1. Dial *185*4*3#\n2. Select Pay Till\n3. Enter Till Number: 7248947\n4. Enter Amount: Shs '+t+'\n5. Enter PIN\n\nTill Name: MOMOTAP HERBS\n\nAfter paying, click WhatsApp Order and send Transaction ID to 0746428184');
+}
+function wa(){
+  var t=document.getElementById('total').innerText;
+  if(t=='0'){alert('Add items first bro!');return;}
+  var msg='Hello Momotap Herbs Busia Sophia!\n\nORDER:\n';
+  for(var k in cart){msg+=k+' x'+cart[k].qty+' = '+(cart[k].qty*cart[k].price)+'\n';}
+  msg+='\nTotal Shs '+t+'\nTill 7248947\n\nI have paid / I want delivery.\nAddress: ';
+  window.open('https://wa.me/256746428184?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>
