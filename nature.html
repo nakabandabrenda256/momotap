@@ -1,98 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MOMOTAP HERBS - Busia Sophia</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#f5f5f5}
-.head{background:#2e7d32;color:white;padding:14px;text-align:center;font-weight:700;position:sticky;top:0;z-index:5}
-.grid{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:white;border-radius:10px;padding:12px;text-align:center;box-shadow:0 2px 5px #ccc}
-.card b{font-size:12px;display:block;height:30px}
-.card span{font-size:12px;color:#333}
-.card button{width:100%;margin-top:8px;background:#2e7d32;color:white;border:0;padding:8px;border-radius:6px;font-weight:700}
-.order{background:white;margin:12px;border-radius:12px;padding:14px;box-shadow:0 2px 10px #ccc}
-.item{font-size:13px;padding:6px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between}
-.total{font-weight:700;display:flex;justify-content:space-between;margin-top:10px;font-size:16px}
-.red{width:100%;background:#d32f2f;color:white;border:0;padding:13px;border-radius:8px;font-weight:700;margin-top:12px}
-.green{width:100%;background:#25D366;color:white;border:0;padding:13px;border-radius:8px;font-weight:700;margin-top:8px}
-.ussd{background:#111;color:#0f0;text-align:center;padding:8px;border-radius:6px;margin-top:8px;font-family:monospace;font-weight:700}
+*{margin:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+body{background:#f5f5f5}
+.head{background:#2e7d32;color:#fff;padding:12px;text-align:center;font-weight:800;position:sticky;top:0;z-index:5}
+.grid{padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card{background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:0 1px 3px #ccc}
+.card b{font-size:11px;display:block;height:28px}
+.card span{font-size:11px}
+.card button{width:100%;margin-top:6px;background:#2e7d32;color:#fff;border:0;padding:7px;border-radius:6px;font-weight:800}
+.order{background:#fff;margin:10px;border-radius:12px;padding:12px;box-shadow:0 2px 10px #ccc;position:sticky;bottom:10px}
+.item{font-size:12px;padding:5px 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between}
+.total{font-weight:800;display:flex;justify-content:space-between;margin-top:8px}
+.red{width:100%;background:#d32f2f;color:#fff;border:0;padding:11px;border-radius:8px;font-weight:800;margin-top:10px}
+.green{width:100%;background:#25D366;color:#fff;border:0;padding:11px;border-radius:8px;font-weight:800;margin-top:6px}
+.ussd{background:#111;color:#0f0;text-align:center;padding:6px;border-radius:6px;margin-top:6px;font-family:monospace;font-size:12px;font-weight:800}
+#loader{position:fixed;top:0;left:0;right:0;bottom:0;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;z-index:99;font-weight:800}
 </style>
 </head>
 <body>
 
-<div class="head">🌿 MOMOTAP HERBS - Busia Sophia<br><small>Till 7248947 • From 15k • WhatsApp 0746428184</small></div>
+<div id="loader">🌿 MOMOTAP HERBS Loading...</div>
+
+<div class="head">🌿 MOMOTAP HERBS - Busia Sophia<br><small style="font-size:10px">Till 7248947 • WhatsApp 0746428184 • From 15k</small></div>
 
 <div class="grid" id="grid"></div>
 
 <div class="order">
-<h3 style="margin:0 0 8px 0">Your Order <small id="count" style="float:right;color:#888">0 items</small></h3>
-<div id="list" style="color:#888;font-size:13px">No items yet. Tap Add.</div>
+<div style="display:flex;justify-content:space-between"><b style="font-size:13px">Your Order</b><small id="count" style="color:#888">0 items</small></div>
+<div id="list" style="color:#888;font-size:12px;margin-top:6px">No items. Tap Add.</div>
 <div class="total"><span>Total:</span><span>Shs <span id="total">0</span></span></div>
 <button class="red" onclick="payTill()">Pay Till 7248947</button>
-<div class="ussd">Dial *185*4*3# → Till 7248947</div>
-<small style="display:block;text-align:center;margin-top:4px;color:#666">Till Name: MOMOTAP HERBS</small>
+<div class="ussd">*185*4*3# → Till 7248947</div>
 <button class="green" onclick="wa()">WhatsApp Order - 0746428184</button>
 </div>
 
 <script>
-var products=[
-["Moringa Powder 250g",15000],["Neem Powder 200g",15000],["Ginger Powder 250g",15000],["Turmeric Powder 250g",15000],
-["Baobab Powder 300g",18000],["Black Seed Oil 60ml",20000],["Detox Tea 100g",15000],["Slimming Tea 100g",18000],
-["Manpower Herbs 100g",20000],["Women Wellness 100g",18000],["Sea Moss 100g",20000],["Ashwagandha 100g",20000],
-["Cinnamon 150g",15000],["Garlic Powder 150g",15000],["Cloves 100g",15000],["Black Pepper 150g",15000],
-["Fenugreek 200g",15000],["Yoni Steam 100g",18000],["Diabetes Mix 150g",22000],["Pressure Herbs 150g",20000],
-["Arthritis Herbs 150g",20000],["Aloe Vera 100g",15000],["Hibiscus Flower 100g",15000],["Maca Root 100g",22000],
-["Green Tea 150g",15000],["Soursop Leaves 100g",18000],["Dandelion Root 100g",18000],["Fertility Tea 100g",20000],
-["Ulcers Mix 150g",20000],["Asthma Herbs 100g",18000],["Fibroids Herbs 150g",22000],["Castor Oil 60ml",15000],
-["Shea Butter 200g",15000],["Lemongrass 150g",15000],["Full Body Cleanse 200g",25000]
-];
-var cart={};
-var grid=document.getElementById('grid');
+// INSTANT LOAD - hide loader
+window.addEventListener('load',()=>{document.getElementById('loader').style.display='none'});
+
+var products=[["Moringa 250g",15000],["Neem 200g",15000],["Ginger 250g",15000],["Turmeric 250g",15000],["Baobab 300g",18000],["Black Seed Oil 60ml",20000],["Detox Tea 100g",15000],["Slimming Tea 100g",18000],["Manpower 100g",20000],["Women Wellness 100g",18000],["Sea Moss 100g",20000],["Ashwagandha 100g",20000],["Cinnamon 150g",15000],["Garlic 150g",15000],["Cloves 100g",15000],["Black Pepper 150g",15000],["Fenugreek 200g",15000],["Yoni Steam 100g",18000],["Diabetes Mix 150g",22000],["Pressure Herbs 150g",20000],["Arthritis 150g",20000],["Aloe Vera 100g",15000],["Hibiscus 100g",15000],["Maca Root 100g",22000],["Green Tea 150g",15000],["Soursop 100g",18000],["Dandelion 100g",18000],["Fertility Tea 100g",20000],["Ulcers Mix 150g",20000],["Asthma Herbs 100g",18000],["Fibroids Herbs 150g",22000],["Castor Oil 60ml",15000],["Shea Butter 200g",15000],["Lemongrass 150g",15000],["Full Body Cleanse 200g",25000]];
+
+var cart={},grid=document.getElementById('grid');
 for(var i=0;i<products.length;i++){
-  var name=products[i][0];
-  var price=products[i][1];
-  var div=document.createElement('div');
-  div.className='card';
-  div.innerHTML='<b>'+name+'</b><span>Shs '+price+'</span><button onclick="addItem(\''+name.replace(/'/g,"")+'\','+price+')">Add</button>';
-  grid.appendChild(div);
+ var n=products[i][0],p=products[i][1];
+ var d=document.createElement('div');d.className='card';
+ d.innerHTML='<b>'+n+'</b><span>Shs '+p+'</span><button onclick="addItem(\''+n.replace(/'/g,"")+'\','+p+')">Add</button>';
+ grid.appendChild(d);
 }
-function addItem(name,price){
-  if(!cart[name]) cart[name]={qty:0,price:price};
-  cart[name].qty++;
-  render();
-}
-function removeItem(name){
-  delete cart[name];
-  render();
-}
+function addItem(n,p){if(!cart[n])cart[n]={qty:0,price:p};cart[n].qty++;render();}
+function removeItem(n){delete cart[n];render();}
 function render(){
-  var list=document.getElementById('list');
-  var total=0,count=0,html='';
-  for(var k in cart){
-    var it=cart[k];
-    var sub=it.qty*it.price;
-    total+=sub; count+=it.qty;
-    html+='<div class="item"><span>'+k+' x'+it.qty+' = '+sub+'</span><span onclick="removeItem(\''+k.replace(/'/g,"")+'\')" style="background:#eee;padding:2px 8px;border-radius:4px">X</span></div>';
-  }
-  if(count==0) list.innerHTML='No items yet. Tap Add.';
-  else list.innerHTML=html;
-  document.getElementById('total').innerText=total;
-  document.getElementById('count').innerText=count+' items';
+ var list=document.getElementById('list'),total=0,count=0,html='';
+ for(var k in cart){var it=cart[k],sub=it.qty*it.price;total+=sub;count+=it.qty;html+='<div class="item"><span>'+k+' x'+it.qty+' = '+sub+'</span><span onclick="removeItem(\''+k.replace(/'/g,"")+'\')" style="background:#eee;padding:2px 6px;border-radius:4px">X</span></div>';}
+ if(count==0)list.innerHTML='No items. Tap Add.';else list.innerHTML=html;
+ document.getElementById('total').innerText=total;document.getElementById('count').innerText=count+' items';
 }
-function payTill(){
-  var t=document.getElementById('total').innerText;
-  if(t=='0'){alert('Add items first bro!');return;}
-  alert('HOW TO PAY TILL:\n\n1. Dial *185*4*3#\n2. Select Pay Till\n3. Enter Till Number: 7248947\n4. Enter Amount: Shs '+t+'\n5. Enter PIN\n\nTill Name: MOMOTAP HERBS\n\nAfter paying, click WhatsApp Order and send Transaction ID to 0746428184');
-}
-function wa(){
-  var t=document.getElementById('total').innerText;
-  if(t=='0'){alert('Add items first bro!');return;}
-  var msg='Hello Momotap Herbs Busia Sophia!\n\nORDER:\n';
-  for(var k in cart){msg+=k+' x'+cart[k].qty+' = '+(cart[k].qty*cart[k].price)+'\n';}
-  msg+='\nTotal Shs '+t+'\nTill 7248947\n\nI have paid / I want delivery.\nAddress: ';
-  window.open('https://wa.me/256746428184?text='+encodeURIComponent(msg),'_blank');
-}
+function payTill(){var t=document.getElementById('total').innerText;if(t=='0'){alert('Add items first!');return;}alert('Dial *185*4*3#\nPay Till: 7248947\nAmount: Shs '+t+'\nName: MOMOTAP HERBS');}
+function wa(){var t=document.getElementById('total').innerText;if(t=='0'){alert('Add items first!');return;}var m='Hello Momotap Herbs!\nORDER:\n';for(var k in cart){m+=k+' x'+cart[k].qty+' = '+(cart[k].qty*cart[k].price)+'\n';}m+='\nTotal Shs '+t+'\nTill 7248947';window.open('https://wa.me/256746428184?text='+encodeURIComponent(m),'_blank');}
+
+// SAVE FOR OFFLINE - ONE TAP OPEN NEXT TIME
+if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/javascript;base64,'+btoa("self.addEventListener('fetch',e=>{e.respondWith(caches.open('momotap').then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(f=>{c.put(e.request,f.clone());return f}))))})"))}
 </script>
 </body>
 </html>
